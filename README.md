@@ -4,6 +4,18 @@ MAL (Language Model Abstraction Layer) is a framework designed to streamline the
 
 Note: At present, MAL supports only OpenAI-compatible API service providers.
 
+## Installation
+
+Add this repository as a submodule to the root directory of your project:
+
+```shell
+your-project-root > git submodule add https://github.com/neolee/mal.git
+```
+
+Next, copy the `mal/providers.toml` file to your project's root directory and customize the configurations as necessary. Alternatively, create a symbolic link in your project's root directory if you prefer to use the predefined configuration.
+
+Lastly, include any required dependencies for your project. MAL itself needs `rtoml` for `.toml` configuration parsing. Depending on your adapter requirements, also add `openai`, `pydantic-ai`, and `agno`.
+
 ## Service Provider Configuration
 
 > `providers.toml` `mal/providers.py`
@@ -24,7 +36,10 @@ coder_model_id = "deepseek-chat"
 reasoner_model_id = "deepseek-reasoner"
 ```
 
-You can define aliases within the `[aliases]` section or modify system default settings in the `[defaults]` section. Afterward, you can import `mal.providers` and utilize the following functions and variables for managing `Provider` objects:
+You can define aliases within the `[aliases]` section or modify system default
+settings in the `[defaults]` section. Afterward, you can import `mal.providers`
+and utilize the following functions and variables for managing `Provider`
+objects:
 
 - `provider_by_name`
 - `provider_by_alias`
