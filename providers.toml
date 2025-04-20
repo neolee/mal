@@ -16,9 +16,9 @@ description = "Qwen Official (Aliyun)"
 api_key_name = "ALIYUN_API_KEY"
 base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 beta_base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-chat_model_id = "qwen-max-latest"
-coder_model_id = "qwen-coder-plus-latest"
-reasoner_model_id = "qwq-plus-latest"
+chat_model_id = "qwen-max"
+coder_model_id = "qwen-coder-plus"
+reasoner_model_id = "qwq-plus"
 
 [providers.aliyun_deepseek]
 description = "DeepSeek (Aliyun)"
