@@ -6,10 +6,10 @@ Note: At present, MAL supports only OpenAI-compatible API service providers.
 
 ## Installation
 
-Add this repository as a submodule to the root directory of your project:
+Just add this repository as a submodule to your project. *In your project root directory* run the following command:
 
 ```shell
-your-project-root > git submodule add https://github.com/neolee/mal.git
+git submodule add https://github.com/neolee/mal.git
 ```
 
 Next, copy the `mal/providers.toml` file to your project's root directory and customize the configurations as necessary. Alternatively, create a symbolic link in your project's root directory if you prefer to use the predefined configuration.
@@ -97,4 +97,10 @@ At present, support is limited to the `OpenAI` client, while the development of 
 
 > `mal/agno/model.py`
 
-Just use models defined in the above file for [agno](https://github.com/agno-agi/agno) agent framework.
+Use models defined in the above file for [agno](https://github.com/agno-agi/agno) agent framework.
+
+## Model Adapter for Google ADK
+
+> `mal/adk/model.py`
+
+Use models defined in the above file for Google's [adk-python](https://github.com/google/adk-python). Additionally, the helper function `model_by_provider` can be used to create a `model` object from a MAL `provider`.
