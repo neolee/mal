@@ -43,7 +43,7 @@ default_provider = provider_by_name()
 
 aliases = data["aliases"]
 def provider_by_alias(alias: str) -> Provider:
-    name = aliases[alias]
+    name = aliases.get(alias, alias)
     return provider_by_name(name)
 
 
