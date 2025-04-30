@@ -51,6 +51,16 @@ Most configuration options are self-explanatory; however, a few additional notes
 - For security reasons, avoid storing real API keys directly in the configuration file. Instead, store these keys as environment variables and reference them by their names within the configuration file using the `api_key_name` field. The actual key will be accessible through the `Provider` objects when you retrieve them via the framework.
 - Fields like `beta_base_url` and any `model_id` other than `chat_model_id` are optional. Use these fields only if your provider supports the corresponding features.
 
+## Model Adapter for OpenAI
+
+> `mal/openai/model.py` `mal/openai/embedder.py`
+
+Simplified interfaces for interacting with the OpenAI RESTful API, designed primarily to achieve separation of concerns.
+
+At present, support is limited to the `OpenAI` client, while the development of the asynchronous `AsyncOpenAI` API is still ongoing.
+
+An embedding model helper `mal.openai.embedder.Embedder` is also included.
+
 ## Model Adapter for PydanticAI
 
 > `mal/pydantic_ai/model.py`
@@ -84,14 +94,6 @@ hello_agent = Agent(
     system_prompt="Be concise, reply with one sentence.",
 )
 ```
-
-## Model Adapter for OpenAI
-
-> `mal/openai/model.py`
-
-Simplified interfaces for interacting with the OpenAI RESTful API, designed primarily to achieve separation of concerns.
-
-At present, support is limited to the `OpenAI` client, while the development of the asynchronous `AsyncOpenAI` API is still ongoing.
 
 ## Model Adapter for Agno
 
