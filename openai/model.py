@@ -48,11 +48,17 @@ def chat_completion_chunk_content(chunk):
 
 
 def chat_completion_reasoning_content(completion):
-    return completion.choices[0].message.reasoning_content
+    try:
+        return completion.choices[0].message.reasoning_content
+    except:
+        return ""
 
 
 def chat_completion_chunk_reasoning_content(chunk):
-    return chunk.choices[0].delta.reasoning_content
+    try:
+        return chunk.choices[0].delta.reasoning_content
+    except:
+        return ""
 
 
 def chat_completion_json(completion):
