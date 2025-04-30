@@ -11,23 +11,23 @@ chat_model_id = "deepseek-chat"
 coder_model_id = "deepseek-chat"
 reasoner_model_id = "deepseek-reasoner"
 
-[providers.aliyun_qwen]
-description = "Qwen Official (Aliyun)"
-api_key_name = "ALIYUN_API_KEY"
-base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-beta_base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-chat_model_id = "qwen-max"
-coder_model_id = "qwen-coder-plus"
-reasoner_model_id = "qwq-plus"
-
 [providers.aliyun_deepseek]
-description = "DeepSeek (Aliyun)"
+description = "DeepSeek on Aliyun"
 api_key_name = "ALIYUN_API_KEY"
 base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 beta_base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 chat_model_id = "deepseek-v3"
 coder_model_id = "deepseek-v3"
 reasoner_model_id = "deepseek-r1"
+
+[providers.aliyun_qwen]
+description = "Qwen Official"
+api_key_name = "ALIYUN_API_KEY"
+base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+beta_base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+chat_model_id = "qwen-max"
+coder_model_id = "qwen-coder-plus"
+reasoner_model_id = "qwq-plus"
 
 [providers.ecnu]
 description = "ECNU"
