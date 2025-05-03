@@ -12,7 +12,7 @@ default_model_type: str = data["defaults"]["model_type"]
 class Provider:
     def __init__(self, config: dict) -> None:
         self.description = config["description"]
-        self.api_key = os.environ.get(config["api_key_name"])
+        self.api_key = os.environ.get(config["api_key_name"], "")
         self.base_url = config["base_url"]
         self.beta_base_url = config["beta_base_url"]
         self.chat_model_id = config["chat_model_id"]
