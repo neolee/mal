@@ -1,8 +1,8 @@
-from typing import Iterable
 from openai import OpenAI, Stream
-from openai.types.chat import ChatCompletion, ChatCompletionMessageParam, ChatCompletionChunk
+from openai.types.chat import ChatCompletion, ChatCompletionChunk
 
 from mal.providers import Provider, default_provider, default_model_type
+from mal.util.llm import Difficulty, evaluate_difficulty
 
 
 def client_by_provider(provider: Provider=default_provider, is_beta=False) -> OpenAI:
@@ -18,17 +18,29 @@ def append_message(messages: list, role: str, message: str):
     messages.append({"role": role, "content": message})
 
 
+def last_user_message(messages: list) -> str:
+    for message in messages[::-1]:
+        if message["role"] == "user": return message["content"]
+    return ""
+
+
 def create_chat_completion(
         client: OpenAI,
         model_name: str,
-        messages: Iterable[ChatCompletionMessageParam],
-        temperature=0.6,
+        messages: list,
         stream=False,
+        auto_think=False,
         **kwargs) -> ChatCompletion | Stream[ChatCompletionChunk]:
+    if auto_think:
+        q = last_user_message(messages)
+        if q:
+            d = evaluate_difficulty(q, client, model_name)
+            if d == Difficulty.Easy:
+                append_message(messages, "assistant", "<think>\n\n</think>\n\n")
+
     response = client.chat.completions.create(
         model=model_name,
         messages=messages,
-        temperature=temperature,
         stream=stream,
         **kwargs
     )
