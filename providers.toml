@@ -48,6 +48,15 @@ coder_model_id = ""
 reasoner_model_id = "ecnu-reasoner"
 default_model_type = "reasoner"
 
+[providers.local]
+description = "Local"
+api_key_name = "LOCAL_API_KEY"
+base_url = "http://localhost:5810/v1"
+beta_base_url = "http://localhost:5810/v1"
+chat_model_id = "gemma-3"
+coder_model_id = "gemma-3"
+reasoner_model_id = "qwen3"
+
 [providers.lmstudio]
 description = "LM Studio"
 api_key_name = "LM_STUDIO_API_KEY"
@@ -65,15 +74,6 @@ beta_base_url = "http://localhost:11434/v1"
 chat_model_id = "qwen2.5:14b"
 coder_model_id = "qwen2.5-coder:32b"
 reasoner_model_id = ""
-
-[providers.local]
-description = "Local"
-api_key_name = "LOCAL_API_KEY"
-base_url = "http://localhost:5810/v1"
-beta_base_url = "http://localhost:5810/v1"
-chat_model_id = "gemma-3"
-coder_model_id = "gemma-3"
-reasoner_model_id = "qwen3"
 
 [defaults]
 provider = "aliyun_qwen"

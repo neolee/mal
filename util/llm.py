@@ -73,7 +73,7 @@ if __name__ == "__main__":
 
     p = provider_by_alias("local")
     client = openai.client_by_provider(p)
-    model_name = p.chat_model_id
+    model_name = p.model_id
 
     query_strings = [
         "Introduce yourself",

@@ -33,20 +33,28 @@ class Provider:
             case _: return self.chat_model_id
 
 
-configs = data["providers"]
+_configs = data["providers"]
 def provider_by_name(name: str=default_provider_name) -> Provider:
-    config: dict = configs[name]
+    config: dict = _configs[name]
     return Provider(config)
 
 default_provider = provider_by_name()
 
 
-aliases = data["aliases"]
+_aliases = data["aliases"]
 def provider_by_alias(alias: str) -> Provider:
-    name = aliases.get(alias, alias)
+    name = _aliases.get(alias, alias)
     return provider_by_name(name)
 
 
 providers = []
 for name in data["providers"]:
     providers.append(provider_by_name(name))
+
+
+deepseek_provider = provider_by_alias("deepseek")
+qwen_provider = provider_by_alias("qwen")
+openrouter_provider = provider_by_alias("openrouter")
+local_provider = provider_by_alias("local")
+lmstudio_provider = provider_by_alias("lmstudio")
+ollama_provider = provider_by_alias("ollama")
