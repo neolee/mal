@@ -1,6 +1,7 @@
 # miscellaneous utilities related to large language model
 
 from enum import Enum
+import re
 from openai import OpenAI
 import mal.openai.model as openai
 
@@ -12,15 +13,38 @@ class Difficulty(Enum):
     Hard = 2
 
 
-def evaluate_difficulty(q: str, client: OpenAI, model_name: str) -> Difficulty:
-    """evaluate the difficulty of a user query, return `easy` or `hard`
+def detect_think_instruction(prompt: str) -> Difficulty | None:
+    """Check for special thinking instructions in the query string.
+    
+    Args:
+        prompt: User prompt string
+    Returns:
+        Difficulty.Hard if contains /think
+        Difficulty.Easy if contains /no_think or /nothink
+    """
+    if re.search(r'(?<![^\s/])/think(?![^\s/])', prompt, re.IGNORECASE):
+        return Difficulty.Hard
+    if re.search(r'(?<![^\s/])/no_?think(?![^\s/])', prompt, re.IGNORECASE):
+        return Difficulty.Easy
+    return None
 
-    args:
-    q: the user query string
-    client: OpenAI compatible API client
-    model_name: specific model used for this evaluation
+
+def evaluate_difficulty(prompt: str, client: OpenAI, model_name: str) -> Difficulty:
+    """Evaluate the difficulty of a user query.
+
+    Args:
+        prompt: User prompt string
+        client: OpenAI compatible API client
+        model_name: Model used for this evaluation
+    Return:
+        Difficulty.Easy if the model think it's easy, Difficulty.Hard otherwise
     """
 
+    # first check for explicit thinking instructions
+    if (forced_difficulty := detect_think_instruction(prompt)) is not None:
+        return forced_difficulty
+
+    # evaluate difficulty using given model
     system_message = "You are a specialized AI model acting as a request difficulty assessor."
     prompt_template = """You are a specialized AI model acting as a request difficulty assessor.
 Your SOLE and ONLY task is to evaluate the inherent difficulty of a user's request that is intended for another AI.
@@ -41,8 +65,9 @@ IMPORTANT:
 ### User's request:
 
 <users_request>\n{query}\n</users_request>"""
-    prompt = prompt_template.format(query=q)
+    prompt = prompt_template.format(query=prompt)
 
+    # If no special instructions found, proceed with AI evaluation
     completion = openai.create_chat_completion(
         client, model_name,
         [
