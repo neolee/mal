@@ -64,8 +64,8 @@ IMPORTANT:
 
 ### User's request:
 
-<users_request>\n{query}\n</users_request>"""
-    prompt = prompt_template.format(query=prompt)
+<users_request>\n{prompt}\n</users_request>"""
+    prompt = prompt_template.format(prompt=prompt)
 
     # If no special instructions found, proceed with AI evaluation
     completion = openai.create_chat_completion(
