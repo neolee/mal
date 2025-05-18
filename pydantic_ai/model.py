@@ -25,9 +25,9 @@ def ollama_model(model_name: str) -> OpenAIModel:
     return OpenAIModel(model_name, provider=op)
 
 
-deepseek = model_by_provider(mal.ollama_provider)
-deepseek_beta = model_by_provider(mal.ollama_provider, is_beta=True)
-deepseek_reasoner = model_by_provider(mal.ollama_provider, model_type="reasoner")
+deepseek = model_by_provider(mal.deepseek_provider)
+deepseek_beta = model_by_provider(mal.deepseek_provider, is_beta=True)
+deepseek_reasoner = model_by_provider(mal.deepseek_provider, model_type="reasoner")
 
 qwen = model_by_provider(mal.qwen_provider)
 qwen_coder = model_by_provider(mal.qwen_provider, model_type="coder")

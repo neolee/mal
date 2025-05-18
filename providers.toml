@@ -71,8 +71,8 @@ description = "Ollama"
 api_key_name = "OLLAMA_API_KEY"
 base_url = "http://localhost:11434/v1"
 beta_base_url = "http://localhost:11434/v1"
-chat_model_id = "qwen2.5:14b"
-coder_model_id = "qwen2.5-coder:32b"
+chat_model_id = "qwen3"
+coder_model_id = ""
 reasoner_model_id = ""
 
 [defaults]
