@@ -54,7 +54,7 @@ api_key_name = "LOCAL_API_KEY"
 base_url = "http://localhost:5810/v1"
 beta_base_url = "http://localhost:5810/v1"
 chat_model_id = "gemma-3"
-coder_model_id = "gemma-3"
+coder_model_id = "devstral"
 reasoner_model_id = "qwen3"
 
 [providers.lmstudio]
