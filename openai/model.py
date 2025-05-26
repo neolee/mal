@@ -43,6 +43,7 @@ openrouter_gemini_pro = model_by_provider_with_model(mal.openrouter_provider, "g
 
 local = model_by_provider(mal.local_provider, description="Gemma-3")
 local_qwen = model_by_provider_with_model(mal.local_provider, "qwen3", "Qwen3-30B-A3B")
+local_qwen_nothink = model_by_provider_with_model(mal.local_provider, "qwen3-nothink", "Qwen3-30B-A3B (w/o Thinking)")
 local_gemma = model_by_provider_with_model(mal.local_provider, "gemma-3", "Gemma-3-12B")
 local_devstral = model_by_provider_with_model(mal.local_provider, "devstral", "Devstral-Small-2505")
 
@@ -54,7 +55,7 @@ default = qwen
 
 models = [deepseek, deepseek_reasoner, qwen, qwen_coder, qwen_reasoner,
           openrouter_gemini_flash, openrouter_gemini_pro,
-          local_qwen, local_gemma, local_devstral, lmstudio]
+          local_qwen, local_qwen_nothink, local_gemma, local_devstral, lmstudio]
 
 
 ## openai compatible api helper functions
