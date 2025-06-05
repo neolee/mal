@@ -41,7 +41,7 @@ openrouter_gemini_flash = model_by_provider_with_model(mal.openrouter_provider, 
 openrouter_gemini_flash_thinking = model_by_provider_with_model(mal.openrouter_provider, "google/gemini-2.5-flash-preview-05-20:thinking", "Gemini 2.5 Flash Preview (thinking)")
 openrouter_gemini_pro = model_by_provider_with_model(mal.openrouter_provider, "google/gemini-2.5-pro-preview", "Gemini 2.5 Pro Preview")
 
-local = model_by_provider(mal.local_provider, description="Gemma-3")
+local = model_by_provider(mal.local_provider, description="Local Default")
 local_qwen = model_by_provider_with_model(mal.local_provider, "qwen3", "Qwen3-30B-A3B")
 local_qwen_nothink = model_by_provider_with_model(mal.local_provider, "qwen3-nothink", "Qwen3-30B-A3B (w/o Thinking)")
 local_gemma = model_by_provider_with_model(mal.local_provider, "gemma-3", "Gemma-3-12B")
