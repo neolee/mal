@@ -3,7 +3,8 @@
 from enum import Enum
 import re
 from openai import OpenAI
-import mal.openai.model as openai
+
+import mal.openai.client as c
 
 
 # evaluate the difficulty of given user query, determine whether a reasoning (deep thinking) model
@@ -68,7 +69,7 @@ IMPORTANT:
     prompt = prompt_template.format(prompt=prompt)
 
     # If no special instructions found, proceed with AI evaluation
-    completion = openai.create_chat_completion(
+    completion = c.create_chat_completion(
         client, model_name,
         [
             {
@@ -86,7 +87,7 @@ IMPORTANT:
         ]
     )
 
-    result = openai.chat_completion_content(completion)
+    result = c.chat_completion_content(completion)
     match result:
         case "easy": return Difficulty.Easy
         case "hard": return Difficulty.Hard
@@ -97,7 +98,7 @@ if __name__ == "__main__":
     from mal.providers import provider_by_alias
 
     p = provider_by_alias("local")
-    client = openai.client_by_provider(p)
+    client = c.client_by_provider(p)
     model_name = p.model_id
 
     query_strings = [
