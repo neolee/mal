@@ -14,7 +14,7 @@ class Provider:
         self.description = config["description"]
         self.api_key = os.environ.get(config["api_key_name"], "")
         self.base_url = config["base_url"]
-        self.beta_base_url = config["beta_base_url"]
+        self.beta_base_url = config["beta_base_url"] or self.base_url
         self.chat_model_id = config["chat_model_id"]
         self.coder_model_id = config["coder_model_id"]
         self.reasoner_model_id = config["reasoner_model_id"]
@@ -54,6 +54,7 @@ for name in data["providers"]:
 
 deepseek_provider = provider_by_alias("deepseek")
 qwen_provider = provider_by_alias("qwen")
+moonshot_provider = provider_by_alias("moonshot")
 openrouter_provider = provider_by_alias("openrouter")
 local_provider = provider_by_alias("local")
 lmstudio_provider = provider_by_alias("lmstudio")
