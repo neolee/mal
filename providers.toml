@@ -62,9 +62,9 @@ description = "Local"
 api_key_name = "LOCAL_API_KEY"
 base_url = "http://localhost:5810/v1"
 beta_base_url = ""
-chat_model_id = "qwen3-2507"
-coder_model_id = "devstral"
-reasoner_model_id = "qwen3"
+chat_model_id = "qwen3"
+coder_model_id = "qwen3-coder"
+reasoner_model_id = "qwen3-thinking"
 
 [providers.lmstudio]
 description = "LM Studio"
