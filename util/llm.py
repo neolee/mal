@@ -30,7 +30,7 @@ def detect_think_instruction(prompt: str) -> Difficulty | None:
     return None
 
 
-def evaluate_difficulty(prompt: str, client: OpenAI, model_name: str) -> Difficulty:
+def evaluate_difficulty(prompt: str, client: OpenAI, model_id: str) -> Difficulty:
     """Evaluate the difficulty of a user query.
 
     Args:
@@ -70,7 +70,7 @@ IMPORTANT:
 
     # If no special instructions found, proceed with AI evaluation
     completion = c.create_chat_completion(
-        client, model_name,
+        client, model_id,
         [
             {
                 "role": "system",
@@ -95,11 +95,10 @@ IMPORTANT:
 
 
 if __name__ == "__main__":
-    from mal.providers import provider_by_alias
+    from mal.providers import local_provider
 
-    p = provider_by_alias("local")
-    client = c.client_by_provider(p)
-    model_name = p.model_id
+    client = c.client_by_provider(local_provider)
+    model_id = local_provider.model_id
 
     query_strings = [
         "Introduce yourself",
@@ -110,7 +109,7 @@ if __name__ == "__main__":
 
     for q in query_strings:
         print(f"> evaluating difficulty of \"{q}\"")
-        d = evaluate_difficulty(q, client, model_name)
+        d = evaluate_difficulty(q, client, model_id)
         match d:
             case Difficulty.Hard:
                 print("it's pretty hard, use a reasoning model")

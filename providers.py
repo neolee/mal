@@ -3,10 +3,10 @@ import rtoml
 
 
 with open("providers.toml", "r") as f:
-    data = rtoml.load(f)
+    _data = rtoml.load(f)
 
-default_provider_name: str = data["defaults"]["provider"]
-default_model_type: str = data["defaults"]["model_type"]
+default_provider_name: str = _data["defaults"]["provider"]
+default_model_type: str = _data["defaults"]["model_type"]
 
 
 class Provider:
@@ -24,7 +24,6 @@ class Provider:
             model_type = config["default_model_type"]
         self.model_id = self.model_id_from_type(model_type)
 
-
     def model_id_from_type(self, model_type: str=default_model_type) -> str:
         match model_type:
             case "chat": return self.chat_model_id
@@ -33,7 +32,7 @@ class Provider:
             case _: return self.chat_model_id
 
 
-_configs = data["providers"]
+_configs = _data["providers"]
 def provider_by_name(name: str=default_provider_name) -> Provider:
     config: dict = _configs[name]
     return Provider(config)
@@ -41,15 +40,15 @@ def provider_by_name(name: str=default_provider_name) -> Provider:
 default_provider = provider_by_name()
 
 
-_aliases = data["aliases"]
+providers = []
+for name in _data["providers"]:
+    providers.append(provider_by_name(name))
+
+
+_aliases = _data["aliases"]
 def provider_by_alias(alias: str) -> Provider:
     name = _aliases.get(alias, alias)
     return provider_by_name(name)
-
-
-providers = []
-for name in data["providers"]:
-    providers.append(provider_by_name(name))
 
 
 deepseek_provider = provider_by_alias("deepseek")
