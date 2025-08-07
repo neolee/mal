@@ -1,4 +1,3 @@
-from typing import Tuple
 from enum import Enum
 
 import re
@@ -8,6 +7,7 @@ from openai import OpenAI, AsyncOpenAI, Stream
 from openai.types.chat import ChatCompletion, ChatCompletionChunk
 
 from mal.providers import Provider, provider_by_alias
+from mal.util import parse_model_str
 
 
 ## helper data type
@@ -19,14 +19,6 @@ class Difficulty(Enum):
 
 ## utilities
 
-def _parse_model_str(model: str) -> Tuple[str, str]:
-    """Parse the 'provider/model' style model string"""
-    assert model
-    strs = model.split("/", 1)
-
-    if len(strs) < 2: return strs[0], ""
-    return strs[0], strs[1]
-
 def _create_client(provider: Provider, is_beta: bool) -> OpenAI:
     base_url = provider.beta_base_url if is_beta else provider.base_url
     return OpenAI(base_url=base_url, api_key=provider.api_key)
@@ -36,7 +28,7 @@ def _create_client(provider: Provider, is_beta: bool) -> OpenAI:
 
 class Client:
     def __init__(self, model: str, name="", is_beta=False) -> None:
-        provider_name, model_id = _parse_model_str(model)
+        provider_name, model_id = parse_model_str(model)
         self.provider = provider_by_alias(provider_name)
         self.model = model_id if model_id else self.provider.model_id
         self.name = name
@@ -195,7 +187,7 @@ class Client:
 
 class Embedder:
     def __init__(self, model: str, dimensions: int) -> None:
-        provider_name, model_id = _parse_model_str(model)
+        provider_name, model_id = parse_model_str(model)
         self.provider = provider_by_alias(provider_name)
         self.model = model_id
         self.dimensions = dimensions

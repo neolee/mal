@@ -1,18 +1,41 @@
 from agno.models.openai.like import OpenAILike
+from agno.embedder.ollama import OllamaEmbedder
+from agno.embedder.openai import OpenAIEmbedder
 
-import mal.providers as mal
+from mal.providers import provider_by_alias
+from mal.util import parse_model_str
 
 
-def model_by_provider_with_model(provider: mal.Provider, is_beta=False, model_name="") -> OpenAILike:
-    base_url = provider.beta_base_url if is_beta else provider.base_url
-    model_name = model_name if model_name else provider.model_id
+## openai compatible model
+
+def model(model: str) -> OpenAILike:
+    provider_name, model_id = parse_model_str(model)
+    provider = provider_by_alias(provider_name)
+    model_id = model_id if model_id else provider.model_id
+
     return OpenAILike(
-        id=model_name,
+        id=model_id,
         api_key=provider.api_key,
-        base_url=base_url
+        base_url=provider.base_url
     )
 
 
-def model_by_provider(provider: mal.Provider, is_beta=False, model_type=mal.default_model_type) -> OpenAILike:
-    model_name = provider.model_id_by_type(model_type)
-    return model_by_provider_with_model(provider, is_beta, model_name)
+## openai compatible embedder
+
+def openai_embedder(model: str, dimensions: int) -> OpenAIEmbedder:
+    provider_name, model_id = parse_model_str(model)
+    provider = provider_by_alias(provider_name)
+    model_id = model_id if model_id else provider.model_id
+
+    return OpenAIEmbedder(
+        base_url=provider.base_url,
+        api_key=provider.api_key,
+        id=model_id,
+        dimensions=dimensions
+    )
+
+
+## ollama embedder
+
+def ollama_embedder(model_id: str, dimensions: int) -> OllamaEmbedder:
+    return OllamaEmbedder(id=model_id, dimensions=dimensions)
