@@ -18,5 +18,5 @@ def model_by_provider_with_model(provider: mal.Provider, is_beta=False, model_na
 
 
 def model_by_provider(provider: mal.Provider, is_beta=False, model_type=mal.default_model_type) -> LiteLlm:
-    model_name = provider.model_id_from_type(model_type)
+    model_name = provider.model_id_by_type(model_type)
     return model_by_provider_with_model(provider, is_beta, model_name)

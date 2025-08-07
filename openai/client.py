@@ -25,7 +25,7 @@ def model_by_provider_with_model(provider: mal.Provider, model_name="", descript
 
 
 def model_by_provider(provider: mal.Provider, model_type=mal.default_model_type, description="") -> Model:
-    model_name = provider.model_id_from_type(model_type)
+    model_name = provider.model_id_by_type(model_type)
     return model_by_provider_with_model(provider, model_name, description)
 
 

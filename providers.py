@@ -22,9 +22,9 @@ class Provider:
         model_type = default_model_type
         if "default_model_type" in config and config["default_model_type"]:
             model_type = config["default_model_type"]
-        self.model_id = self.model_id_from_type(model_type)
+        self.model_id = self.model_id_by_type(model_type)
 
-    def model_id_from_type(self, model_type: str=default_model_type) -> str:
+    def model_id_by_type(self, model_type: str=default_model_type) -> str:
         match model_type:
             case "chat": return self.chat_model_id
             case "coder": return self.coder_model_id
