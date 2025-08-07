@@ -1,8 +1,8 @@
 # LLM Abstraction Layer (MAL)
 
-MAL (Language Model Abstraction Layer) is a framework designed to streamline the configuration and integration of applications across various language model services. It includes a service provider configuration framework and adaptation layers tailored for popular agent frameworks.
+*MAL (Language Model Abstraction Layer)* is a framework designed to streamline the configuration and integration of applications across various language model services. It includes a service provider configuration framework and adaptation layers tailored for popular agent frameworks.
 
-Note: At present, MAL supports only OpenAI-compatible API service providers.
+Note: At present, *MAL* supports only OpenAI-compatible API service providers.
 
 ## Installation
 
@@ -65,13 +65,13 @@ At present, support is limited to the `OpenAI` client, while the development of 
 
 An embedding model helper class `mal.adapter.openai.Embedder` is also included.
 
-## Adapter for PydanticAI
+## Adapter for Pydantic AI
 
 > `mal/adapter/pydantic_ai.py`
 
 The [Pydantic AI framework](https://ai.pydantic.dev/) (`pydantic_ai`) constructs an `OpenAIProvider` object using the parameters `base_url` and `api_key`. This `OpenAIProvider` is then utilized along with `model_id` to create an `OpenAIModel` object, which is essential for constructing agents (via the `model=` parameter).
 
-As a bridge between **MAL** and `pydantic_ai`, the module `mal.adapter.pydantic_ai` handles all the necessary tasks. Simply import this module and use `openai_model` function to create model objects which can be used in *Pydantic AI* framework. 
+As a bridge between *MAL* and *Pydantic AI*, the module `mal.adapter.pydantic_ai` handles all the necessary tasks. Simply import this module and use `openai_model` function to create model objects which can be used in *Pydantic AI* framework. 
 
 ``` python
 deepseek = openai_model("deepseek/deepseek-chat")
@@ -100,6 +100,6 @@ hello_agent = Agent(
 
 > `mal/adapter/agno.py`
 
-Like the adapter for Pydantic AI, just use `model` function in `mal.adapter.agno` to create models which can be used in [agno](https://github.com/agno-agi/agno) agent framework.
+Like the adapter for Pydantic AI, just use `model` function in `mal.adapter.agno` to create models which can be used in [Agno](https://github.com/agno-agi/agno) agent framework.
 
-Another helper function `openai_embedder` also included for creating *agno* compatible embedder models.
+Another helper function `openai_embedder` also included for creating *Agno* compatible embedder models.
