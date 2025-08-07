@@ -43,76 +43,63 @@ objects:
 
 - `provider_by_name`
 - `provider_by_alias`
-- `providers`
 - `default_provider`
+- `providers`
+- `deepseek_provider` `qwen_provider` etc.
 
 Most configuration options are self-explanatory; however, a few additional notes are worth mentioning:
 - The group name without the `providers` prefix represents the provider's name (e.g., `deepseek`). You can use this name in the `provider_by_name` function to retrieve the corresponding `Provider` object.
+- Using `provider_by_alias` instead of `provider_by_name` is always better since it falls back to `provider_by_name` when an `alias` does not exist.
 - For security reasons, avoid storing real API keys directly in the configuration file. Instead, store these keys as environment variables and reference them by their names within the configuration file using the `api_key_name` field. The actual key will be accessible through the `Provider` objects when you retrieve them via the framework.
 - Fields like `beta_base_url` and any model id other than `model_id` and `chat_model_id` are optional. Use these fields only if your provider supports the corresponding features.
 
-## Model Adapter for OpenAI
+## Adapter for OpenAI
 
-> `mal/openai/model.py` `mal/openai/embedder.py`
+> `mal/adapter/openai.py`
 
 Simplified interfaces for interacting with the OpenAI RESTful API, designed primarily to achieve separation of concerns.
 
-Use `client_by_provider` to get OpenAI compatible `client` object from a `provider`. Use `model_by_provider_with_model` and `model_by_provider` to get a `Model` object including `provider`, `model_name` and `description` attributes. Or use predefined `Model` objects in `mal/openai/model.py`.
+The `mal.adapter.openai.Client` class wraps OpenAI compatible client object and our features together. You need to assign a model string with `<provider name>/<model id>` style in the constructor. The second part of that string is optional and the default model id in `provider` will be used if it is empty.
 
 At present, support is limited to the `OpenAI` client, while the development of the asynchronous `AsyncOpenAI` API is still ongoing.
 
-An embedding model helper `mal.openai.embedder.Embedder` is also included.
+An embedding model helper class `mal.adapter.openai.Embedder` is also included.
 
-## Model Adapter for PydanticAI
+## Adapter for PydanticAI
 
-> `mal/pydantic_ai/model.py`
+> `mal/adapter/pydantic_ai.py`
 
-The [PydanticAI framework](https://ai.pydantic.dev/) (`pydantic_ai`) constructs an `OpenAIProvider` object using the parameters `base_url` and `api_key`. This `OpenAIProvider` is then utilized along with `model_name` to create an `OpenAIModel` object, which is essential for constructing agents (via the `model=` parameter).
+The [Pydantic AI framework](https://ai.pydantic.dev/) (`pydantic_ai`) constructs an `OpenAIProvider` object using the parameters `base_url` and `api_key`. This `OpenAIProvider` is then utilized along with `model_id` to create an `OpenAIModel` object, which is essential for constructing agents (via the `model=` parameter).
 
-As a bridge between **MAL** and `pydantic_ai`, the module `mal.pydantic_ai.model` handles all the necessary tasks. Simply import this module and use functions like below:
-
-- `model_by_provider_with_model`
-- `model_by_provider`
-- `ollama_model`
-
-...or any pre-defined model objects such as:
+As a bridge between **MAL** and `pydantic_ai`, the module `mal.adapter.pydantic_ai` handles all the necessary tasks. Simply import this module and use `openai_model` function to create model objects which can be used in *Pydantic AI* framework. 
 
 ``` python
-deepseek = model_by_provider(mal.ollama_provider)
-deepseek_beta = model_by_provider(mal.ollama_provider, is_beta=True)
-deepseek_reasoner = model_by_provider(mal.ollama_provider, model_type="reasoner")
+deepseek = openai_model("deepseek/deepseek-chat")
+deepseek_reasoner = openai_model("deepseek/deepseek-reasoner")
 
-qwen = model_by_provider(mal.qwen_provider)
-qwen_coder = model_by_provider(mal.qwen_provider, model_type="coder")
-qwen_reasoner = model_by_provider(mal.qwen_provider, model_type="reasoner")
+qwen = openai_model("qwen/qwen-plus-latest")
+qwen_coder = openai_model("qwen/qwen3-coder-plus")
 
-openrouter_gemini_flash = model_by_provider_with_model(mal.openrouter_provider, model_name="google/gemini-2.5-flash-preview")
-openrouter_gemini_pro = model_by_provider_with_model(mal.openrouter_provider, model_name="google/gemini-2.5-pro-preview")
-
-local_qwen = model_by_provider_with_model(mal.local_provider, model_name="qwen3")
-local_gemma = model_by_provider_with_model(mal.local_provider, model_name="gemma-3")
+openrouter_gemini_flash = openai_model("openrouter/google/gemini-2.5-flash")
+openrouter_gemini_pro = openai_model("openrouter/google/gemini-2.5-pro")
 
 default = qwen
 ```
 
 ``` python
 from pydantic_ai import Agent
-import mal.pydantic_ai.model as model
+from models import default
 
 hello_agent = Agent(
-    model=model.default,
+    model=default,
     system_prompt="Be concise, reply with one sentence.",
 )
 ```
 
-## Model Adapter for Agno
+## Adapter for Agno
 
-> `mal/agno/model.py`
+> `mal/adapter/agno.py`
 
-Use models defined in the above file for [agno](https://github.com/agno-agi/agno) agent framework.
+Like the adapter for Pydantic AI, just use `model` function in `mal.adapter.agno` to create models which can be used in [agno](https://github.com/agno-agi/agno) agent framework.
 
-## Model Adapter for Google ADK
-
-> `mal/adk/model.py`
-
-Use models defined in the above file for Google's [adk-python](https://github.com/google/adk-python). Additionally, the helper function `model_by_provider` can be used to create a `model` object from a MAL `provider`.
+Another helper function `openai_embedder` also included for creating *agno* compatible embedder models.
