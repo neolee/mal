@@ -158,7 +158,6 @@ class Client:
         """)
         prompt = prompt_template.format(prompt=prompt)
 
-        # If no special instructions found, proceed with AI evaluation
         completion = self.create_chat_completion(
             [
                 {
