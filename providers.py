@@ -10,7 +10,8 @@ default_model_type: str = _data["defaults"]["model_type"]
 
 
 class Provider:
-    def __init__(self, config: dict) -> None:
+    def __init__(self, name: str, config: dict) -> None:
+        self.name = name
         self.description = config["description"]
         self.api_key = os.environ.get(config["api_key_name"], "")
         self.base_url = config["base_url"]
@@ -35,7 +36,7 @@ class Provider:
 _configs = _data["providers"]
 def provider_by_name(name: str=default_provider_name) -> Provider:
     config: dict = _configs[name]
-    return Provider(config)
+    return Provider(name, config)
 
 default_provider = provider_by_name()
 
