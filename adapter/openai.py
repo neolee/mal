@@ -26,11 +26,11 @@ def _create_client(provider: Provider, is_beta: bool) -> OpenAI:
 
 ## openai compatible client
 
-class Client:
+class Model:
     def __init__(self, model: str, name="", is_beta=False) -> None:
         provider_name, model_id = parse_model_str(model)
         self.provider = provider_by_alias(provider_name)
-        self.model = model_id if model_id else self.provider.model_id
+        self.model_id = model_id if model_id else self.provider.model_id
         self.name = name
         self.is_beta = is_beta
         self.client = _create_client(self.provider, self.is_beta)
@@ -51,7 +51,7 @@ class Client:
                     self.append_message(messages, "assistant", "<think>\n\n</think>\n\n")
 
         response = self.client.chat.completions.create(
-            model=self.model,
+            model=self.model_id,
             messages=messages,
             stream=stream,
             **kwargs
@@ -59,7 +59,7 @@ class Client:
         return response
 
     def create_completion(self, **kwargs):
-        response = self.client.completions.create(model=self.model, **kwargs)
+        response = self.client.completions.create(model=self.model_id, **kwargs)
         return response
 
     ## response protocol helpers
