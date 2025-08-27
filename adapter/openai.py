@@ -23,6 +23,16 @@ def _create_client(provider: Provider, is_beta: bool) -> OpenAI:
     base_url = provider.beta_base_url if is_beta else provider.base_url
     return OpenAI(base_url=base_url, api_key=provider.api_key)
 
+def _not_empty(obj) -> bool:
+    return obj and obj.choices and len(obj.choices) > 0
+
+def safe_guard(func):
+    def wrapper(self_obj, completion_obj):
+        if _not_empty(completion_obj):
+            return func(self_obj, completion_obj)
+        return ""
+    return wrapper
+
 
 ## openai compatible client
 
@@ -72,33 +82,35 @@ class Model:
             if message["role"] == "user": return message["content"]
         return ""
 
+    @safe_guard
     def chat_completion_message(self, completion):
         return completion.choices[0].message
 
+    @safe_guard
     def chat_completion_content(self, completion):
         return completion.choices[0].message.content
 
+    @safe_guard
     def chat_completion_chunk_content(self, chunk):
         return chunk.choices[0].delta.content
 
+    @safe_guard
     def chat_completion_reasoning_content(self, completion):
-        try:
-            return completion.choices[0].message.reasoning_content
-        except:
-            return ""
+        return getattr(completion.choices[0].message, "reasoning_content", "")
 
+    @safe_guard
     def chat_completion_chunk_reasoning_content(self, chunk):
-        try:
-            return chunk.choices[0].delta.reasoning_content
-        except:
-            return ""
+        return getattr(chunk.choices[0].delta, "reasoning_content", "")
 
+    @safe_guard
     def chat_completion_json(self, completion):
         return completion.choices[0].message.model_dump_json()
 
+    @safe_guard
     def chat_completion_tool_calls(self, completion):
         return completion.choices[0].message.tool_calls
 
+    @safe_guard
     def completion_text(self, completion):
         return completion.choices[0].text
 
