@@ -34,8 +34,8 @@ description = "Moonshot Official"
 api_key_name = "MOONSHOT_API_KEY"
 base_url = "https://api.moonshot.cn/v1"
 beta_base_url = ""
-chat_model_id = "kimi-k2-0711-preview"
-coder_model_id = "kimi-k2-0711-preview"
+chat_model_id = "kimi-k2-0905-preview"
+coder_model_id = "kimi-k2-0905-preview"
 reasoner_model_id = "kimi-thinking-preview"
 
 [providers.openrouter]
