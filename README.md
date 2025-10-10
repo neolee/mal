@@ -59,7 +59,7 @@ Most configuration options are self-explanatory; however, a few additional notes
 
 Simplified interfaces for interacting with the OpenAI RESTful API, designed primarily to achieve separation of concerns.
 
-The `mal.adapter.openai.Client` class wraps OpenAI compatible client object and our features together. You need to assign a model string with `<provider name>/<model id>` style in the constructor. The second part of that string is optional and the default model id in `provider` will be used if it is empty.
+The `mal.adapter.openai.Model` class wraps OpenAI compatible client object(`.client` attribute) and our features together. You need to assign a model string with `<provider name>/<model id>` style in the constructor. The second part of that string is optional and the default model id in `provider` will be used if it is empty.
 
 At present, support is limited to the `OpenAI` client, while the development of the asynchronous `AsyncOpenAI` API is still ongoing.
 
