@@ -46,7 +46,8 @@ class Model:
         self.client = _create_client(self.provider, self.is_beta)
 
     def set_mode(self, is_beta=False):
-        if self.is_beta == is_beta: return
+        if self.is_beta == is_beta:
+            return
         self.is_beta = is_beta
         self.client = _create_client(self.provider, self.is_beta)
 
@@ -79,7 +80,8 @@ class Model:
 
     def last_user_message(self, messages: list) -> str:
         for message in messages[::-1]:
-            if message["role"] == "user": return message["content"]
+            if message["role"] == "user":
+                return message["content"]
         return ""
 
     @safe_guard
@@ -189,9 +191,12 @@ class Model:
 
         result = self.chat_completion_content(completion)
         match result:
-            case "easy": return Difficulty.Easy
-            case "hard": return Difficulty.Hard
-            case _: return Difficulty.Hard
+            case "easy":
+                return Difficulty.Easy
+            case "hard":
+                return Difficulty.Hard
+            case _:
+                return Difficulty.Hard
 
 
 ## openai compatible embedder
