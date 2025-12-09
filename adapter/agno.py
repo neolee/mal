@@ -1,6 +1,6 @@
 from agno.models.openai.like import OpenAILike
-from agno.embedder.ollama import OllamaEmbedder
-from agno.embedder.openai import OpenAIEmbedder
+from agno.knowledge.embedder.ollama import OllamaEmbedder
+from agno.knowledge.embedder.openai import OpenAIEmbedder
 
 from mal.providers import provider_by_alias
 from mal.util import parse_model_str
