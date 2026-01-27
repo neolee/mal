@@ -27,7 +27,7 @@ base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 beta_base_url = ""
 chat_model_id = "qwen-plus-latest"
 coder_model_id = "qwen3-coder-plus"
-reasoner_model_id = "qwen-plus-latest"
+reasoner_model_id = "qwen3-max-2026-01-23"
 
 [providers.moonshot]
 description = "Moonshot Official"
@@ -35,8 +35,8 @@ api_key_name = "MOONSHOT_API_KEY"
 base_url = "https://api.moonshot.cn/v1"
 beta_base_url = ""
 chat_model_id = "kimi-k2-turbo-preview"
-coder_model_id = "kimi-k2-thinking"
-reasoner_model_id = "kimi-k2-thinking"
+coder_model_id = "kimi-k2.5"
+reasoner_model_id = "kimi-k2.5"
 
 [providers.zhipu]
 description = "Zhipu Official"
