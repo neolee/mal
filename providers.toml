@@ -47,6 +47,15 @@ chat_model_id = "glm-4.7"
 coder_model_id = "glm-4.7"
 reasoner_model_id = "glm-4.7"
 
+[providers.openai]
+description = "OpenAI"
+api_key_name = "OPENAI_API_KEY"
+base_url = "https://api.openai.com/v1"
+beta_base_url = ""
+chat_model_id = "gpt-5.2"
+coder_model_id = "gpt-5.2-codex"
+reasoner_model_id = "gpt-5.2"
+
 [providers.openrouter]
 description = "OpenRouter"
 api_key_name = "OPENROUTER_API_KEY"
