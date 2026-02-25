@@ -16,9 +16,9 @@ description = "Qwen"
 api_key_name = "ALIYUN_API_KEY"
 base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 beta_base_url = "https://dashscope.aliyuncs.com/api/v2/apps/protocols/compatible-mode/v1"
-chat_model_id = "qwen-plus-latest"
-coder_model_id = "qwen3-coder-plus"
-reasoner_model_id = "qwen3-max-2026-01-23"
+chat_model_id = "qwen3.5-plus"
+coder_model_id = "qwen3.5-plus"
+reasoner_model_id = "qwen3.5-plus"
 embedding_model_id = "text-embedding-v3"
 
 [providers.moonshot]
@@ -37,8 +37,8 @@ api_key_name = "ZHIPU_API_KEY"
 base_url = "https://open.bigmodel.cn/api/paas/v4/"
 beta_base_url = ""
 chat_model_id = "glm-4.7"
-coder_model_id = "glm-4.7"
-reasoner_model_id = "glm-4.7"
+coder_model_id = "glm-5"
+reasoner_model_id = "glm-5"
 
 [providers.openai]
 description = "OpenAI"
@@ -56,7 +56,7 @@ base_url = "https://openrouter.ai/api/v1"
 beta_base_url = ""
 chat_model_id = "google/gemini-3-flash-preview"
 coder_model_id = "google/gemini-3-flash-preview"
-reasoner_model_id = "google/gemini-3-pro-preview"
+reasoner_model_id = "google/gemini-3.1-pro-preview"
 
 [providers.local]
 description = "Local"
