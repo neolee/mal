@@ -12,6 +12,8 @@ from mal.util import parse_model_str
 
 ## helper data type
 
+THINK_PATTERN = re.compile(r'<think>(.*?)</think>', re.DOTALL)
+
 class Difficulty(Enum):
     Easy = 1
     Hard = 2
@@ -115,6 +117,90 @@ class Model:
     @safe_guard
     def completion_text(self, completion):
         return completion.choices[0].text
+
+    def create_chat_completion_clean(self, messages: list, stream=False, **kwargs):
+        """Create chat completion with automatic think tag cleaning.
+
+        For non-streaming: returns dict with 'content' and 'reasoning_content'
+        For streaming: returns generator yielding {'type': 'reasoning'|'content', 'delta': str}
+
+        This handles models like Qwen3 that mix reasoning content into message.content
+        wrapped in <think> tags.
+        """
+        response = self.create_chat_completion(messages, stream=stream, **kwargs)
+
+        if not stream:
+            # Non-streaming: clean and return immediately
+            content = self.chat_completion_content(response) or ""
+            native_reasoning = self.chat_completion_reasoning_content(response) or ""
+
+            if native_reasoning:
+                # Model natively supports reasoning_content (e.g., DeepSeek)
+                return {"content": content, "reasoning_content": native_reasoning}
+
+            # Need to extract from content (e.g., Qwen3)
+            clean_content, reasoning = self._extract_think_from_content(content)
+            return {"content": clean_content, "reasoning_content": reasoning}
+
+        # Streaming: return cleaning generator
+        return self._clean_stream(response)
+
+    ## think content cleaning utilities
+
+    def _extract_think_from_content(self, content: str) -> tuple[str, str]:
+        """Extract think content from message content.
+
+        Returns:
+            (clean_content, reasoning_content): cleaned content and extracted think content
+        """
+        if not content:
+            return "", ""
+
+        match = THINK_PATTERN.search(content)
+        if match:
+            reasoning = match.group(1).strip()
+            clean = THINK_PATTERN.sub('', content).strip()
+            return clean, reasoning
+        return content, ""
+
+    def _clean_stream(self, stream):
+        """Stream generator that separates reasoning and content from think tags."""
+        in_think = False
+
+        for chunk in stream:
+            raw_content = self.chat_completion_chunk_content(chunk) or ""
+            native_reasoning = self.chat_completion_chunk_reasoning_content(chunk) or ""
+
+            # Native support: pass through directly (e.g., DeepSeek)
+            if native_reasoning:
+                if native_reasoning.strip():
+                    yield {"type": "reasoning", "delta": native_reasoning}
+                if raw_content:
+                    yield {"type": "content", "delta": raw_content}
+                continue
+
+            # Need to parse think tags from content (e.g., Qwen3)
+            if not in_think:
+                if "<think>" in raw_content:
+                    parts = raw_content.split("<think>", 1)
+                    if parts[0]:
+                        yield {"type": "content", "delta": parts[0]}
+                    in_think = True
+                    if len(parts) > 1 and parts[1]:
+                        yield {"type": "reasoning", "delta": parts[1]}
+                else:
+                    if raw_content:
+                        yield {"type": "content", "delta": raw_content}
+            else:
+                if "</think>" in raw_content:
+                    parts = raw_content.split("</think>", 1)
+                    if parts[0]:
+                        yield {"type": "reasoning", "delta": parts[0]}
+                    in_think = False
+                    if len(parts) > 1 and parts[1]:
+                        yield {"type": "content", "delta": parts[1]}
+                else:
+                    yield {"type": "reasoning", "delta": raw_content}
 
     ## extra utilities
 
