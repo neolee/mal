@@ -118,7 +118,9 @@ class Model:
     def completion_text(self, completion):
         return completion.choices[0].text
 
-    def create_chat_completion_clean(self, messages: list, stream=False, **kwargs):
+    ## high level wrapper with extra safe cleans and hacks
+
+    def request_model_contents(self, messages: list, stream=False, auto_fix=False, **kwargs):
         """Create chat completion with automatic think tag cleaning.
 
         For non-streaming: returns dict with 'content' and 'reasoning_content'
@@ -130,20 +132,20 @@ class Model:
         response = self.create_chat_completion(messages, stream=stream, **kwargs)
 
         if not stream:
-            # Non-streaming: clean and return immediately
+            # non-streaming: clean and return immediately
             content = self.chat_completion_content(response) or ""
             native_reasoning = self.chat_completion_reasoning_content(response) or ""
 
-            if native_reasoning:
-                # Model natively supports reasoning_content (e.g., DeepSeek)
+            if native_reasoning or not auto_fix:
+                # model natively supports reasoning_content (e.g., deepseek)
                 return {"content": content, "reasoning_content": native_reasoning}
 
-            # Need to extract from content (e.g., Qwen3)
+            # need to extract from content (e.g., qwen3.x)
             clean_content, reasoning = self._extract_think_from_content(content)
             return {"content": clean_content, "reasoning_content": reasoning}
 
-        # Streaming: return cleaning generator
-        return self._clean_stream(response)
+        # streaming: return cleaning generator
+        return self._clean_stream(response, auto_fix)
 
     ## think content cleaning utilities
 
@@ -163,7 +165,7 @@ class Model:
             return clean, reasoning
         return content, ""
 
-    def _clean_stream(self, stream):
+    def _clean_stream(self, stream, auto_fix=False):
         """Stream generator that separates reasoning and content from think tags."""
         in_think = False
 
@@ -171,15 +173,15 @@ class Model:
             raw_content = self.chat_completion_chunk_content(chunk) or ""
             native_reasoning = self.chat_completion_chunk_reasoning_content(chunk) or ""
 
-            # Native support: pass through directly (e.g., DeepSeek)
-            if native_reasoning:
+            # native support: pass through directly (e.g., seepseek)
+            if native_reasoning or not auto_fix:
                 if native_reasoning.strip():
                     yield {"type": "reasoning", "delta": native_reasoning}
                 if raw_content:
                     yield {"type": "content", "delta": raw_content}
                 continue
 
-            # Need to parse think tags from content (e.g., Qwen3)
+            # need to parse think tags from content (e.g., qwen3.x)
             if not in_think:
                 if "<think>" in raw_content:
                     parts = raw_content.split("<think>", 1)
