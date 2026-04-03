@@ -120,7 +120,7 @@ class Model:
 
     ## high level wrapper with extra safe cleans and hacks
 
-    def request_model_contents(self, messages: list, stream=False, auto_fix=False, **kwargs):
+    def request_model_contents(self, messages: list, is_beta=False, auto_fix=False, stream=False, **kwargs):
         """Create chat completion with automatic think tag cleaning.
 
         For non-streaming: returns dict with 'content' and 'reasoning_content'
@@ -129,6 +129,7 @@ class Model:
         This handles models like Qwen3 that mix reasoning content into message.content
         wrapped in <think> tags.
         """
+        self.set_mode(is_beta)
         response = self.create_chat_completion(messages, stream=stream, **kwargs)
 
         if not stream:
